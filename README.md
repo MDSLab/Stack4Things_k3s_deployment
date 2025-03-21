@@ -5,12 +5,14 @@ This repository contains the complete deployment of Stack4Things, an open-source
 
 To run this project correctly, ensure to install the following dependencies using this guide:
 
-- K3s: A lightweight alternative to Kubernetes
-- Helm: A package manager for Kubernetes
-- MetalLB: A load balancer for Kubernetes clusters
-- Istio: A service mesh for traffic management 
+- [K3s](#k3s-installation): A lightweight alternative to Kubernetes
+- [Helm](#helm-installation): A package manager for Kubernetes
+- [MetalLB](#metallb-installation): A load balancer for Kubernetes clusters
+- [Istio](#istio-installation-with-helm): A service mesh for traffic management 
 
-### K3s installation
+If you already have those dependencies, jump to [S4T installation](#s4t---stack4things-deployment)
+
+## K3s installation
   
 ```bash
 curl -sfL https://get.k3s.io | sh -
@@ -23,10 +25,10 @@ If you find any kind of error, please refer to the official guide:
 
 - [Quick-Start-K3s](https://docs.k3s.io/quick-start)
 
-### Helm installation   
+## Helm installation   
 The [Helm project](https://helm.sh/docs/intro/install/) provides two official methods for downloading and installing Helm. In addition to these, the Helm community also provides other installation methods via various package managers.
 
-#### Script installation (recommended) 
+### Script installation (recommended) 
 Helm provides an installation script that automatically downloads and installs the latest version of Helm on your system.
   
 You can download the script and run it locally. It is well documented, so you can read it in advance to understand what it does before running it.
@@ -37,7 +39,7 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 ```
 
-#### Binary installation
+### Binary installation
 Every release of Helm provides binary releases for a variety of OSes. These binary versions can be manually downloaded and installed.
 
 - Download your [desired version](https://github.com/helm/helm/releases)
@@ -47,8 +49,8 @@ Every release of Helm provides binary releases for a variety of OSes. These bina
 
 From there, you should be able to run the client and add the stable chart repository: helm help.
 
-### MetalLB installation
-#### Installation by manifest (recommended)
+## MetalLB installation
+### Installation by manifest (recommended)
 To install MetalLB, apply the manifest:
 
 ```bash
@@ -82,7 +84,7 @@ kubectl get pods -n metallb-system
 kubectl get svc -A
 ```
 
-### Istio installation with Helm  
+## Istio installation with Helm  
 
 #### Adding the Helm repository of Istio  
 ```bash
@@ -172,16 +174,16 @@ If you find any kind of error, please refer to the official guide:
 
 ## S4T - Stack4Things Deployment
 
-Questa guida descrive come clonare, configurare e avviare **Stack4Things** su Kubernetes.
+This guide describes how to clone, configure and start **Stack4Things** on Kubernetes.
 
 ### 
 1. Clone this repository:
 ```
-git clone **url repository**
+git clone https://github.com/MDSLab/Stack4Things_k3s_deployment.git
 ```
-2.
+2. Move to correct directory
 ``` 
-cd S4T-k3s
+cd Stack4Things_k3s_deployment
 ```
 3. Apply YAML files to the Kubernetes cluster:
 ```bash
