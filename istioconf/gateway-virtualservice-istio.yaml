@@ -1,0 +1,45 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: iotronic-ui-gateway  
+spec:
+  selector:
+    istio: ingress
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: iotronic-ui  
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - iotronic-ui-gateway  
+  http:
+  - match:
+    - uri:
+        prefix: /iotronic-ui
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: iotronic-ui  
+        port:
+          number: 80 
+  - match:
+    - uri:
+        prefix: /horizon
+    route:
+    - destination:
+        host: iotronic-ui  
+        port:
+          number: 80
+

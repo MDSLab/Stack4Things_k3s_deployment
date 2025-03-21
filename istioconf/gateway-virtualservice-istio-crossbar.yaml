@@ -1,0 +1,48 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: crossbar-gateway
+spec:
+  selector:
+    istio: ingress  
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+      number: 8181
+      name: tcp
+      protocol: TCP
+    hosts:
+    - "*"
+
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: crossbar
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - crossbar-gateway 
+  tcp:
+  - match:
+    - port: 8181
+    route:
+    - destination:
+        host: crossbar 
+        port:
+          number: 8181 
+  http:
+  - match:
+    - uri:
+        prefix: /crossbar
+    route:
+    - destination:
+        host: crossbar
+        port:
+          number: 80
