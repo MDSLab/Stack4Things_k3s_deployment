@@ -7,12 +7,6 @@ spec:
     istio: ingress  
   servers:
   - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*"
-  - port:
       number: 8181
       name: tcp
       protocol: TCP
@@ -37,12 +31,3 @@ spec:
         host: crossbar 
         port:
           number: 8181 
-  http:
-  - match:
-    - uri:
-        prefix: /crossbar
-    route:
-    - destination:
-        host: crossbar
-        port:
-          number: 80

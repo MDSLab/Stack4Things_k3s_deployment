@@ -199,7 +199,43 @@ kubectl get pods
 kubectl get svc
 ```
 
-### Creating the Gateway and VirtualService for Istio
+### Exposing port 8181
+
+Modify the Service for istio-ingress to include port 8181.
+Run the following command to edit the existing configuration:
+
+```
+kubectl edit svc istio-ingress -n istio-ingress
+```
+Then, add the 8181 port under spec.ports:
+
+```
+spec:
+  ports:
+    - name: tcp-crossbar
+      port: 8181
+      targetPort: 8181
+      protocol: TCP
+```
+
+Now, you need to configure Istio to handle port 8181.
+Edit the deployment with:
+
+```
+kubectl edit deployment istio-ingress -n istio-ingress
+```
+Look for the containers → ports section and add:
+
+```
+        - containerPort: 8181
+          name: tcp-crossbar
+          protocol: TCP
+```
+
+Save and close.
+
+
+### Creating the Gateway and VirtualService for Iotronic-UI and Crossbar
 
 - Enter the folder where the configuration file is contained and apply the YAML file to the Kubernetes cluster:
 ```bash
@@ -210,6 +246,7 @@ kubectl apply -f .
 - Verify that the resources have been created correctly:
 ```bash
 kubectl describe virtualservice iotronic-ui
+kubectl describe virtualservice crossbar
 ```
 
 - Check the istio-ingress service to obtain the public IP of the load balancer:
@@ -218,8 +255,8 @@ kubectl get svc istio-ingress -n istio-ingress
 ```
 - Output expetation:
 ```bash
-NAME            TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)                                      AGE
-istio-ingress   LoadBalancer   10.x.x.x      192.168.1.100   15021:30152/TCP,80:31152/TCP,443:30936/TCP   3d3h
+NAME            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                     AGE
+istio-ingress   LoadBalancer   10.43.24.188   192.168.1.100   15021:32693/TCP,80:30914/TCP,443:32500/TCP,8181:30946/TCP   4d21h
 ```
 
 - Verify the creation of the VirtualService:
@@ -230,7 +267,8 @@ kubectl get virtualservice
 -  Output expetation:
 ```bash
 NAME          GATEWAYS                  HOSTS   AGE
-iotronic-ui   ["iotronic-ui-gateway"]   ["*"]   11m
+crossbar      ["crossbar-gateway"]      ["*"]   4d1h
+iotronic-ui   ["iotronic-ui-gateway"]   ["*"]   4d21h
 ```
 
 - Check the gateway:
@@ -241,7 +279,8 @@ kubectl get gateway
 - Output expetation:
 ```bash
 NAME                  AGE
-iotronic-ui-gateway   12m
+crossbar-gateway      4d1h
+iotronic-ui-gateway   4d21h
 ```
 
 ### Testing service access
