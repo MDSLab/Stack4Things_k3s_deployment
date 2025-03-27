@@ -21,7 +21,6 @@ data:
 
 
     [wamp]
-    #wamp_transport_url = wss://10.43.250.188:8181/
     wamp_transport_url = wss://crossbar:8181/
     wamp_realm = s4t
     skip_cert_verify= True

@@ -103,6 +103,9 @@ data:
     # Indicate which header field names may be used during the
     # actual request. (list value)
     #allow_headers =
+  policy.json: |
+    {
+    }
 kind: ConfigMap
 metadata:
   labels:

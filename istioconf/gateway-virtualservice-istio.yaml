@@ -4,7 +4,7 @@ metadata:
   name: iotronic-ui-gateway  
 spec:
   selector:
-    istio: ingress
+    istio: ingress  # Usa il controller Istio predefinito
   servers:
   - port:
       number: 80
@@ -22,7 +22,7 @@ spec:
   hosts:
   - "*"
   gateways:
-  - iotronic-ui-gateway  
+  - iotronic-ui-gateway  # Collega al gateway appena creato
   http:
   - match:
     - uri:
@@ -31,9 +31,9 @@ spec:
       uri: /
     route:
     - destination:
-        host: iotronic-ui  
+        host: iotronic-ui  # Nome del servizio (assicurati che esista)
         port:
-          number: 80 
+          number: 80  # Cambia la porta di destinazione, se necessario (ad esempio 8080, 80, ecc.)
   - match:
     - uri:
         prefix: /horizon

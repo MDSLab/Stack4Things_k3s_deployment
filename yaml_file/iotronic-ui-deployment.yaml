@@ -29,15 +29,15 @@ spec:
             - containerPort: 80
               protocol: TCP
           volumeMounts:
-            - mountPath: /etc/openstack-dashboard
-              name: iotronic-ui-cm0
             - mountPath: /var/log/apache2
               name: iotronic-ui-logs
+            - mountPath: /etc/openstack-dashboard
+              name: iotronic-ui-cm1
       restartPolicy: Always
       volumes:
-        - configMap:
-            name: iotronic-ui-cm0
-          name: iotronic-ui-cm0
         - name: iotronic-ui-logs
           persistentVolumeClaim:
             claimName: iotronic-ui-logs
+        - configMap:
+            name: iotronic-ui-cm1
+          name: iotronic-ui-cm1
