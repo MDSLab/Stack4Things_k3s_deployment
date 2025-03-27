@@ -65,7 +65,7 @@ metadata:
   namespace: metallb-system 
 spec:
   addresses:
-  - 192.168.1.100-192.168.1.200 # Change pool of IPs if needed
+  - x.x.x.x-x.x.x.x # Change pool of IPs if needed
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -165,7 +165,7 @@ istio-ingress-<PodID>   1/1     Running
 kubectl get svc -n istio-ingress
 >> Expected output:
 NAME            TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)
-istio-ingress   LoadBalancer   x.x.x.x         192.168.1.100         15021:30268/TCP,80:31240/TCP,443:32410/TCP
+istio-ingress   LoadBalancer   x.x.x.x         x.x.x.x         15021:30268/TCP,80:31240/TCP,443:32410/TCP
 ```
 
 If you find any kind of error, please refer to the official guide:
@@ -234,6 +234,8 @@ Look for the containers → ports section and add:
 
 Save and close.
 
+#### Expose also the port 1474 in the same way for lightning-rod ui
+
 
 ### Creating the Gateway and VirtualService for Iotronic-UI and Crossbar
 
@@ -247,6 +249,7 @@ kubectl apply -f .
 ```bash
 kubectl describe virtualservice iotronic-ui
 kubectl describe virtualservice crossbar
+kubectl describe virtualservice lightning-rod
 ```
 
 - Check the istio-ingress service to obtain the public IP of the load balancer:
@@ -256,7 +259,7 @@ kubectl get svc istio-ingress -n istio-ingress
 - Output expetation:
 ```bash
 NAME            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                     AGE
-istio-ingress   LoadBalancer   10.43.24.188   192.168.1.100   15021:32693/TCP,80:30914/TCP,443:32500/TCP,8181:30946/TCP   4d21h
+istio-ingress   LoadBalancer   10.43.24.188   x.x.x.x   15021:32693/TCP,80:30914/TCP,443:32500/TCP,8181:30946/TCP   4d21h
 ```
 
 - Verify the creation of the VirtualService:
@@ -266,9 +269,10 @@ kubectl get virtualservice
 
 -  Output expetation:
 ```bash
-NAME          GATEWAYS                  HOSTS   AGE
-crossbar      ["crossbar-gateway"]      ["*"]   4d1h
-iotronic-ui   ["iotronic-ui-gateway"]   ["*"]   4d21h
+NAME            GATEWAYS                    HOSTS   AGE
+crossbar        ["crossbar-gateway"]        ["*"]   24h
+iotronic-ui     ["iotronic-ui-gateway"]     ["*"]   24h
+lightning-rod   ["lightning-rod-gateway"]   ["*"]   20m
 ```
 
 - Check the gateway:
@@ -278,19 +282,20 @@ kubectl get gateway
 
 - Output expetation:
 ```bash
-NAME                  AGE
-crossbar-gateway      4d1h
-iotronic-ui-gateway   4d21h
+NAME                    AGE
+crossbar-gateway        24h
+iotronic-ui-gateway     24h
+lightning-rod-gateway   20m
 ```
 
 ### Testing service access
 - Use curl to test access to the Iotronic UI via the istio-ingress IP:
 ```bash
-curl 192.168.1.100/iotronic-ui
+curl x.x.x.x/iotronic-ui
 ```
 Check also via browser the access to the page:
 ```
-http://192.168.1.100:8100/horizon/auth/login/?next=/horizon/
+http://x.x.x.x/horizon/auth/login/?next=/horizon/
 ```
 
 
