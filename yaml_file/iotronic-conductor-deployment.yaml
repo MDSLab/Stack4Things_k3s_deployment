@@ -53,16 +53,6 @@ spec:
             - name: OS_USER_DOMAIN_NAME
               value: Default
           image: lucadagati/iotronic-conductor:latest
-          livenessProbe:
-            exec:
-              command:
-                - test
-                - -f
-                - /tmp/conductor-setup-done
-            failureThreshold: 5
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            timeoutSeconds: 5
           name: iotronic-conductor
           ports:
             - containerPort: 8812

@@ -29,14 +29,6 @@ spec:
             - name: RABBITMQ_DEFAULT_USER
               value: openstack
           image: rabbitmq:3.7-management
-          livenessProbe:
-            exec:
-              command:
-                - rabbitmqctl
-                - status
-            failureThreshold: 5
-            initialDelaySeconds: 10
-            periodSeconds: 10
           name: rabbitmq
           ports:
             - containerPort: 5672
