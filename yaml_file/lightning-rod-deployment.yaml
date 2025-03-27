@@ -24,10 +24,12 @@ spec:
     spec:
       containers:
         - args:
+          - |
+            sed -i 's|self\.wstun_ip *= *urlparse(board\.wamp_config\["url"\])\[1\]\.split('\'':'\'')\[0\]|self.wstun_ip = "iotronic-wstun"|' /usr/local/lib/python3*/site-packages/iotronic_lightningrod/modules/service_manager.py
+            exec startLR
           command:
             - /bin/sh
             - -c
-            - "startLR"
           image: lucadagati/lrod:compose
           name: lightning-rod
           ports:
