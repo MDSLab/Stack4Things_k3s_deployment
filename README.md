@@ -199,8 +199,8 @@ kubectl get pods
 kubectl get svc
 ```
 
-### Exposing port 8181
-
+### Exposing port on Istio
+#### Example
 Modify the Service for istio-ingress to include port 8181.
 Run the following command to edit the existing configuration:
 
@@ -218,24 +218,58 @@ spec:
       protocol: TCP
 ```
 
-Now, you need to configure Istio to handle port 8181.
-Edit the deployment with:
-
-```
-kubectl edit deployment istio-ingress -n istio-ingress
-```
-Look for the containers → ports section and add:
-
-```
-        - containerPort: 8181
-          name: tcp-crossbar
-          protocol: TCP
-```
-
 Save and close.
 
-#### Expose also the port 1474 in the same way for lightning-rod ui
-
+### It is suggested to expose those ports: 80-443-8181-1474-8812-8080-5672-15672-8070
+#### svc edit
+```
+ports:
+    - name: status-port
+      nodePort: 31965
+      port: 15021
+      protocol: TCP
+      targetPort: 15021
+    - name: http2
+      nodePort: 31540
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: https
+      nodePort: 31702
+      port: 443
+      protocol: TCP
+      targetPort: 443
+    - name: tcp-crossbar
+      nodePort: 32298
+      port: 8181
+      protocol: TCP
+      targetPort: 8181
+    - name: lr
+      nodePort: 30772
+      port: 1474
+      protocol: TCP
+      targetPort: 1474
+    - name: conductor
+      nodePort: 31711
+      port: 8812
+      protocol: TCP
+      targetPort: 8812
+    - name: wstun
+      nodePort: 30147
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: rabbit
+      nodePort: 30320
+      port: 5672
+      protocol: TCP
+      targetPort: 5672
+    - name: rabbitui
+      nodePort: 30998
+      port: 15672
+      protocol: TCP
+      targetPort: 15672
+```
 
 ### Creating the Gateway and VirtualService for Iotronic-UI and Crossbar
 
